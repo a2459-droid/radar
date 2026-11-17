@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar de Afinidad de Clase 🔮</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800;900&family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #17153b 50%, #2e1065 100%);
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --accent: #ec4899;
+            --accent-2: #8b5cf6;
+            --text-light: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 26px;
+            padding: 24px 22px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            flex: 1;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 9px 8px;
+            border: none;
+            border-radius: 11px;
+            background: transparent;
+            color: #cbd5e1;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.35);
+        }
+
+        .admin-trigger {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            padding: 9px 11px;
+            border-radius: 13px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .admin-trigger:hover {
+            color: #fde047;
+            border-color: #fde047;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.65rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #f472b6, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .invite-banner {
+            background: rgba(236, 72, 153, 0.18);
+            border: 1px solid #ec4899;
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
+            color: #fbcfe8;
+        }
+
+        input[type="text"], input[type="password"], textarea, select {
+            width: 100%;
+            padding: 13px 15px;
+            border-radius: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(9, 13, 22, 0.85);
+            color: white;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus, textarea:focus, select:focus {
+            border-color: #ec4899;
+        }
+
+        .vs-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .vs-row select {
+            margin-bottom: 0;
+        }
+
+        .vs-badge {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            color: #fde047;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 0.96rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(236, 72, 153, 0.45);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 0.84rem;
+            padding: 11px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f472b6, #8b5cf6);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-counter {
+            font-size: 0.82rem;
+            color: #f472b6;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 14px 16px;
+            border-radius: 14px;
+            text-align: left;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: rgba(236, 72, 153, 0.22);
+            border-color: #ec4899;
+            transform: translateX(4px);
+        }
+
+        .match-box {
+            background: rgba(0, 0, 0, 0.35);
+            border: 2px solid #ec4899;
+            border-radius: 20px;
+            padding: 18px;
+            margin: 14px 0 18px 0;
+        }
+
+        .match-percent {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.1rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #fde047, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            margin: 6px 0;
+        }
+
+        .match-tag {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.3);
+            border: 1px solid #a78bfa;
+            color: #ddd6fe;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+
+        .ranking-list {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .rank-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 11px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #ec4899;
+        }
+
+        .rank-names {
+            font-weight: 700;
+            font-size: 0.92rem;
+        }
+
+        .rank-sub {
+            font-size: 0.76rem;
+            color: #cbd5e1;
+        }
+
+        .rank-score {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #fde047;
+        }
+
+        .admin-box {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid #fde047;
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .status-msg {
+            font-size: 0.8rem;
+            color: #86efac;
+            margin-top: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-test" onclick="switchTab('test')">🔮 Hacer Test</button>
+            <button class="tab-btn" id="tab-radar" onclick="switchTab('radar')">💘 Comparar Clase</button>
+        </div>
+        <button class="admin-trigger" onclick="openAdminModal()">🔒 Admin</button>
+    </div>
+
+    <!-- SECCIÓN 1: TEST DE AFINIDAD -->
+    <div id="section-test">
+        <div id="start-screen">
+            <h1>Radar de Afinidad 🔮</h1>
+            <div id="invite-alert" class="invite-banner hidden"></div>
+            <p class="subtitle">Responde estas 20 preguntas sobre tu forma de ser y descubre con quién encajas mejor en clase.</p>
+            <input type="text" id="username" placeholder="Tu nombre o apodo..." maxlength="20">
+            <button class="btn" onclick="startQuiz()">Empezar Ahora 🚀</button>
+        </div>
+
+        <div id="quiz-screen" class="hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            <div class="question-counter" id="q-counter">Pregunta 1 de 20</div>
+            <div class="question-text" id="q-text"></div>
+            <div class="options-list" id="options-container"></div>
+        </div>
+
+        <div id="result-screen" class="hidden">
+            <h2 style="font-family: 'Montserrat', sans-serif; font-size: 1.3rem; margin-bottom: 10px;">¡Perfil Completado! ⚡</h2>
+
+            <div id="direct-match-box" class="match-box hidden">
+                <div style="font-size: 0.9rem; color: #fbcfe8;">Compatibilidad entre <strong id="match-names"></strong></div>
+                <div class="match-percent" id="match-percent">90%</div>
+                <div class="match-tag" id="match-tag"></div>
+                <div id="match-verdict" style="font-size: 0.9rem; color: #e2e8f0;"></div>
+            </div>
+
+            <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 16px;">Tu perfil ya se ha guardado en todos los dispositivos. Pasa tu enlace al grupo para ver cuánto encajas con los demás:</p>
+
+            <button class="btn btn-whatsapp" onclick="shareMatchLink()">Retar al grupo por WhatsApp 📲</button>
+            <button class="btn btn-secondary" onclick="switchTab('radar')">Ir a Comparar Personas 💘</button>
+            <div class="status-msg" id="email-status">Sincronizando perfil con la clase... ⏳</div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: COMPARADOR 1 VS 1 -->
+    <div id="section-radar" class="hidden">
+        <h1>Comparar Dos Personas 💘</h1>
+        <p class="subtitle">Elige a dos personas que ya hayan hecho el test para ver cuánto encajan sus personalidades:</p>
+
+        <div class="vs-row">
+            <select id="select-p1"><option value="">Persona 1...</option></select>
+            <span class="vs-badge">VS</span>
+            <select id="select-p2"><option value="">Persona 2...</option></select>
+        </div>
+
+        <button class="btn" style="margin-top: 12px;" onclick="compareTwoPeople()">Calcular % Entre Ellos 🔮</button>
+
+        <div id="duo-result-box" class="match-box hidden">
+            <div style="font-size: 0.9rem; color: #fbcfe8;">Afinidad entre <strong id="duo-names"></strong></div>
+            <div class="match-percent" id="duo-percent">85%</div>
+            <div class="match-tag" id="duo-tag"></div>
+            <div id="duo-verdict" style="font-size: 0.88rem; color: #e2e8f0;"></div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="calculateClassRadar()">Ver Ranking de Toda la Clase 🏆</button>
+        <div id="radar-results" class="ranking-list"></div>
+    </div>
+
+    <!-- SECCIÓN 3: PANEL ADMIN CON CONTRASEÑA -->
+    <div id="section-admin" class="hidden">
+        <h1 id="admin-title">Acceso Privado 🔒</h1>
+        
+        <div id="admin-login-box">
+            <p class="subtitle">Introduce la contraseña del organizador para gestionar los datos:</p>
+            <input type="password" id="admin-pass" placeholder="Contraseña...">
+            <button class="btn" onclick="checkAdminPass()">Entrar 🔓</button>
+            <button class="btn btn-secondary" onclick="switchTab('test')">Volver</button>
+        </div>
+
+        <div id="admin-editor-box" class="admin-box hidden">
+            <p style="font-size: 0.85rem; color: #fde047; font-weight: 700; margin-bottom: 8px;">Códigos registrados en la nube (uno por línea):</p>
+            <p style="font-size: 0.78rem; color: #cbd5e1; margin-bottom: 10px;">Se sincronizan automáticamente en todos los móviles. Aquí puedes editar o borrar cualquiera:</p>
+            <textarea id="codes-input" rows="8" placeholder="Nombre:01230123010123012301"></textarea>
+            <button class="btn" onclick="saveAdminCodes()">Guardar Cambios en la Nube ✅</button>
+            <button class="btn btn-secondary" onclick="switchTab('radar')">Ir a Comparar Personas 💘</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Almacén en la nube compartida para sincronizar todos los dispositivos automáticamente
+    const CLOUD_DB_URL = "https://jsonblob.com/api/jsonBlob/019d3a8f-7e21-7b4c-9a10-4f8d2c6e1b90";
+    const LOCAL_KEY = "classRadarCodes20";
+
+    const questions = [
+        {
+            type: "sync",
+            text: "Viernes por la tarde sin deberes. ¿Cuál es tu plan ideal?",
+            options: [
+                "Quedar en el parque o dar una vuelta con todo el grupo",
+                "Ir al centro comercial, al cine o a comer algo por ahí",
+                "Hacer deporte, ir en bici o cualquier plan con movimiento",
+                "Viciar a videojuegos o ver series tirado en casa"
+            ]
+        },
+        {
+            type: "team",
+            text: "En clase, ¿qué tipo de compañero de pupitre eres?",
+            options: [
+                "El que está de cachondeo y hace reír al de al lado",
+                "El que organiza los apuntes y salva al compañero",
+                "El tranquilo que va a su bola e intenta enterarse de algo",
+                "El que se distrae con una mosca y pregunta qué hay que hacer"
+            ],
+            complements: [[0, 1], [1, 3], [0, 2]]
+        },
+        {
+            type: "sync",
+            text: "¿Qué tipo de humor te hace más gracia?",
+            options: [
+                "Memes absurdos y vídeos random de internet",
+                "Las anécdotas y cosas del insti",
+                "Sarcasmo, ironía y zascas rápidos",
+                "Humor negro o bromas pesadas entre colegas"
+            ]
+        },
+        {
+            type: "team",
+            text: "Vais a pedir algo en un sitio y se han equivocado con tu pedido:",
+            options: [
+                "Voy yo mismo al mostrador a reclamarlo sin ningún problema",
+                "Le pido a algún amigo que vaya conmigo o lo diga por mí",
+                "Me lo como igual para no montar ningún lío",
+                "Hago una broma con el grupo sobre la mala suerte que tengo"
+            ],
+            complements: [[0, 1], [0, 2], [1, 3]]
+        },
+        {
+            type: "team",
+            text: "¿Cómo eres en los grupos de WhatsApp?",
+            options: [
+                "El que manda todos los memes, stickers y audios largos",
+                "El que contesta a todos los mensajes al minuto",
+                "El que está haciendo bromas y diciendo tonterías",
+                "El que dice de hacer Meet"
+            ],
+            complements: [[0, 1], [2, 3], [1, 3]]
+        },
+        {
+            type: "team",
+            text: "El profe manda hacer un trabajo en parejas. ¿Qué rol sueles coger?",
+            options: [
+                "El que organiza el trabajo para sacar buena nota",
+                "El creativo que hace la presentación súper visual",
+                "El que prefiere exponerlo delante de la clase",
+                "El que anima el ambiente para que no sea un aburrimiento"
+            ],
+            complements: [[0, 3], [1, 2], [0, 2], [1, 3]]
+        },
+        {
+            type: "sync",
+            text: "¿Cuál es tu nivel de puntualidad cuando quedáis?",
+            options: [
+                "Llego 5 o 10 minutos antes siempre",
+                "Justo a la hora clavada",
+                "5 o 10 minutos tarde diciendo 'ya estoy bajando'",
+                "Llego cuando llego, el tiempo es relativo"
+            ]
+        },
+        {
+            type: "team",
+            text: "En un parque de atracciones frente a la montaña rusa más bestia:",
+            options: [
+                "Me subo el primero y en primera fila",
+                "Me subo solo si alguien me convence o viene conmigo",
+                "Prefiero quedarme abajo vigilando las mochilas y haciendo fotos",
+                "Voy directo a las atracciones más tranquilas o de agua"
+            ],
+            complements: [[0, 1], [0, 2], [1, 3]]
+        },
+        {
+            type: "team",
+            text: "Cuando hay un pique o discusión en el grupo, tú sueles:",
+            options: [
+                "Intentar poner paz para que se arregle rápido",
+                "Soltar una broma para quitarle hierro al asunto",
+                "Quedarme mirando y enterarme de todo el salseo",
+                "Dar mi opinión directa aunque sea polémica"
+            ],
+            complements: [[0, 3], [1, 3], [0, 2]]
+        },
+        {
+            type: "sync",
+            text: "¿Qué energía tienes normalmente durante el día?",
+            options: [
+                "Batería al 100% todo el rato, no paro quieto",
+                "Depende totalmente de con quién esté en ese momento",
+                "Empiezo dormido por la mañana pero por la tarde me activo",
+                "Modo ahorro de energía casi todo el día"
+            ]
+        },
+        {
+            type: "sync",
+            text: "Suena el timbre del recreo. ¿Qué haces nada más salir de clase?",
+            options: [
+                "Salir corriendo al patio sin dudar",
+                "Ir directo a almorzar tranquilamente hablando con mi grupo",
+                "Ir tranquilamente y salir el último",
+                "Aprovechar para repasar o terminar algo de última hora"
+            ]
+        },
+        {
+            type: "team",
+            text: "Te toca ir a un campamento, actividad o sitio donde no conoces a nadie:",
+            options: [
+                "A los diez minutos ya estoy hablando con medio mundo",
+                "Me pego a una o dos personas que me den buen rollo y voy sobre seguro",
+                "Observo un rato el ambiente antes de soltarme",
+                "Espero a que alguien venga a sacarme conversación"
+            ],
+            complements: [[0, 3], [0, 2], [1, 3]]
+        },
+        {
+            type: "sync",
+            text: "En Educación Física, cuando toca jugar un partido en equipo:",
+            options: [
+                "Lo doy todo",
+                "Me esfuerzo pero sobre todo para pasármelo bien y reírme",
+                "No me complico mucho",
+                "Intento escaquearme o hacer lo mínimo posible"
+            ]
+        },
+        {
+            type: "team",
+            text: "Se te olvida en casa algo importante para una clase o excursión:",
+            options: [
+                "Improviso una solución rápida en dos minutos y listo",
+                "Me agobio bastante y le doy mil vueltas hasta que se soluciona",
+                "Pido ayuda rápido al primero que pillo por el pasillo",
+                "Me lo tomo con filosofía: 'lo que sea, será'"
+            ],
+            complements: [[0, 1], [3, 1], [0, 2]]
+        },
+        {
+            type: "team",
+            text: "Te pasa algo surrealista por la mañana y se lo cuentas a tus amigos:",
+            options: [
+                "Lo cuento con todo lujo de detalles, imitando voces y haciendo teatro",
+                "Voy directo al grano en dos frases porque si no me lío",
+                "Empiezo por el final porque no me aguanto las ganas",
+                "Espero el momento exacto para soltarlo y que tenga más gracia"
+            ],
+            complements: [[0, 1], [0, 3], [2, 1]]
+        },
+        {
+            type: "sync",
+            text: "A la hora de contar un secreto o un salseo:",
+            options: [
+                "Soy una tumba, si me lo cuentan no sale de mí jamás",
+                "Se lo cuento solo a mi mejor amigo/a de máxima confianza",
+                "Soy quien descubre todos los salseos antes que nadie",
+                "No aguanto la presión y se me escapa sin querer"
+            ]
+        },
+        {
+            type: "sync",
+            text: "Te avisan un sábado a las 5 de la tarde para salir en 15 minutos:",
+            options: [
+                "Estoy listo en 5 minutos, me encantan los planes improvisados",
+                "Depende totalmente de quién me lo proponga",
+                "Voy, pero me estresa un poco no haberlo sabido antes",
+                "Si ya tenía mi tarde organizada en casa, me da mucha pereza salir"
+            ]
+        },
+        {
+            type: "sync",
+            text: "Si os dejan solos en clase sin profe durante una hora:",
+            options: [
+                "Monto un juego o reto con toda la clase",
+                "Me pongo a charlar sin parar con mi grupo",
+                "Me pongo a dibujar, escuchar música o descansar en la mesa",
+                "Aprovecho para adelantar deberes y no hacer nada en casa"
+            ]
+        },
+        {
+            type: "team",
+            text: "¿Cómo reaccionas cuando algo te sale mal o suspenden un examen?",
+            options: [
+                "Me rayo un rato pero enseguida se me pasa con una broma",
+                "Me da igual, a la siguiente sale mejor",
+                "Me enfado bastante conmigo mismo porque soy muy competitivo",
+                "Empiezo a buscar excusas creativas para explicarlo en casa"
+            ],
+            complements: [[2, 0], [2, 1], [0, 3]]
+        },
+        {
+            type: "sync",
+            text: "¿Qué valoras más en un amigo o compañero de clase?",
+            options: [
+                "Que sea súper leal y siempre esté ahí cuando hace falta",
+                "Que tenga buen rollo y me haga reír todos los días",
+                "Que sea sincero y te diga las cosas a la cara",
+                "Que se apunte a cualquier plan sin poner excusas"
+            ]
+        }
+    ];
+
+    let currentQuestion = 0;
+    let userName = "";
+    let userAnswers = [];
+    let myFullCode = "";
+    let challengerData = null;
+    let adminUnlocked = false;
+
+    window.onload = async function() {
+        loadSavedCodes();
+        await syncFromCloud();
+
+        const params = new URLSearchParams(window.location.search);
+        const challengeParam = params.get("c");
+        if (challengeParam && challengeParam.includes(":")) {
+            const parts = challengeParam.split(":");
+            if (parts[0] && parts[1] && parts[1].length === questions.length) {
+                challengerData = {
+                    name: decodeURIComponent(parts[0]),
+                    answers: parts[1].split("").map(Number)
+                };
+                const alertBox = document.getElementById("invite-alert");
+                alertBox.innerHTML = `🔥 <strong>${challengerData.name}</strong> te ha retado a ver cuánto encajáis. ¡Haz el test para descubrir vuestro %!`;
+                alertBox.classList.remove("hidden");
+                await saveCodeEverywhere(`${challengerData.name}:${parts[1]}`);
+            }
+        }
+    };
+
+    function getCloudStorageId() {
+        // Mismo ID de sala compartida por todos los usuarios de esta web
+        const roomKey = "radar_afinidades_clase_2026_v1";
+        return `https://kvdb.io/8xQ2mN9pL4vR7tW1zK5y/${roomKey}`;
+    }
+
+    async function syncFromCloud() {
+        try {
+            const res = await fetch(getCloudStorageId(), { cache: "no-store" });
+            if (res.ok) {
+                const text = await res.text();
+                if (text && text.includes(":")) {
+                    const merged = mergeCodeLists(localStorage.getItem(LOCAL_KEY) || "", text);
+                    localStorage.setItem(LOCAL_KEY, merged);
+                    document.getElementById("codes-input").value = merged;
+                    refreshSelectors();
+                }
+            }
+        } catch (e) {
+            console.log("Modo local activo");
+        }
+    }
+
+    function mergeCodeLists(listA, listB) {
+        const map = new Map();
+        const allLines = (listA + "\n" + listB).split("\n").map(l => l.trim()).filter(l => l.includes(":"));
+        allLines.forEach(line => {
+            const [name, digits] = line.split(":");
+            if (name && digits && digits.trim().length === questions.length) {
+                map.set(name.trim().toLowerCase(), `${name.trim()}:${digits.trim()}`);
+            }
+        });
+        return Array.from(map.values()).join("\n");
+    }
+
+    async function saveCodeEverywhere(newCode) {
+        // 1. Guardar localmente al instante
+        const currentLocal = localStorage.getItem(LOCAL_KEY) || "";
+        const updatedLocal = mergeCodeLists(currentLocal, newCode);
+        localStorage.setItem(LOCAL_KEY, updatedLocal);
+        document.getElementById("codes-input").value = updatedLocal;
+        refreshSelectors();
+
+        // 2. Descargar últimos datos de la nube, mezclar y subir para que todos los móviles lo vean
+        try {
+            let cloudText = "";
+            const getRes = await fetch(getCloudStorageId(), { cache: "no-store" });
+            if (getRes.ok) {
+                cloudText = await getRes.text();
+            }
+            const mergedAll = mergeCodeLists(cloudText, updatedLocal);
+            localStorage.setItem(LOCAL_KEY, mergedAll);
+            document.getElementById("codes-input").value = mergedAll;
+            refreshSelectors();
+
+            await fetch(getCloudStorageId(), {
+                method: "POST",
+                body: mergedAll
+            });
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    async function switchTab(tab) {
+        document.getElementById("tab-test").classList.toggle("active", tab === "test");
+        document.getElementById("tab-radar").classList.toggle("active", tab === "radar");
+        document.getElementById("section-test").classList.toggle("hidden", tab !== "test");
+        document.getElementById("section-radar").classList.toggle("hidden", tab !== "radar");
+        document.getElementById("section-admin").classList.toggle("hidden", tab !== "admin");
+        if (tab === "radar" || tab === "admin") {
+            await syncFromCloud();
+            refreshSelectors();
+        }
+    }
+
+    async function openAdminModal() {
+        await switchTab("admin");
+        if (adminUnlocked) {
+            document.getElementById("admin-title").innerText = "Panel de Control 🔓";
+            document.getElementById("admin-login-box").classList.add("hidden");
+            document.getElementById("admin-editor-box").classList.remove("hidden");
+        } else {
+            document.getElementById("admin-title").innerText = "Acceso Privado 🔒";
+            document.getElementById("admin-login-box").classList.remove("hidden");
+            document.getElementById("admin-editor-box").classList.add("hidden");
+            document.getElementById("admin-pass").value = "";
+        }
+    }
+
+    async function checkAdminPass() {
+        const pass = document.getElementById("admin-pass").value.trim();
+        if (pass === "030105") {
+            adminUnlocked = true;
+            await syncFromCloud();
+            document.getElementById("admin-title").innerText = "Panel de Control 🔓";
+            document.getElementById("admin-login-box").classList.add("hidden");
+            document.getElementById("admin-editor-box").classList.remove("hidden");
+        } else {
+            alert("Contraseña incorrecta.");
+        }
+    }
+
+    async function saveAdminCodes() {
+        const raw = document.getElementById("codes-input").value.trim();
+        localStorage.setItem(LOCAL_KEY, raw);
+        refreshSelectors();
+        try {
+            await fetch(getCloudStorageId(), {
+                method: "POST",
+                body: raw
+            });
+            alert("¡Códigos guardados y sincronizados en todos los dispositivos!");
+        } catch (e) {
+            alert("¡Códigos guardados localmente!");
+        }
+    }
+
+    function startQuiz() {
+        const input = document.getElementById("username").value.trim().replace(/[:\n\r]/g, "");
+        if (!input) {
+            alert("¡Escribe tu nombre o apodo antes de empezar!");
+            return;
+        }
+        userName = input;
+        userAnswers = [];
+        currentQuestion = 0;
+        document.getElementById("start-screen").classList.add("hidden");
+        document.getElementById("quiz-screen").classList.remove("hidden");
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentQuestion];
+        document.getElementById("q-counter").innerText = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
+        document.getElementById("q-text").innerText = q.text;
+        document.getElementById("progress").style.width = `${(currentQuestion / questions.length) * 100}%`;
+
+        const container = document.getElementById("options-container");
+        container.innerHTML = "";
+
+        q.options.forEach((optText, idx) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = optText;
+            btn.onclick = () => {
+                userAnswers.push(idx);
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    finishQuiz();
+                }
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function evaluatePair(ans1, ans2) {
+        let totalScore = 0;
+        let syncMatches = 0;
+        let teamMatches = 0;
+
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            const a = ans1[i];
+            const b = ans2[i];
+
+            if (q.type === "sync") {
+                const diff = Math.abs(a - b);
+                if (diff === 0) {
+                    totalScore += 5;
+                    syncMatches++;
+                } else if (diff === 1) {
+                    totalScore += 3;
+                } else if (diff === 2) {
+                    totalScore += 1;
+                }
+            } else if (q.type === "team") {
+                const isComplement = q.complements.some(pair =>
+                    (pair[0] === a && pair[1] === b) || (pair[1] === a && pair[0] === b)
+                );
+                if (isComplement) {
+                    totalScore += 5;
+                    teamMatches++;
+                } else if (a === b) {
+                    totalScore += 3.5;
+                    syncMatches++;
+                } else {
+                    totalScore += 1.5;
+                }
+            }
+        }
+
+        const percent = Math.min(99, Math.max(30, Math.round(totalScore)));
+        let dynamicTag = "✨ Equilibrio Natural";
+        if (teamMatches >= 4 && teamMatches >= syncMatches) {
+            dynamicTag = "🧩 Dúo Complementario";
+        } else if (syncMatches >= 5) {
+            dynamicTag = "⚡ Almas Gemelas de Rollo";
+        } else if (percent < 56) {
+            dynamicTag = "🌪️ Mundos Opuestos";
+        }
+
+        return { percent, dynamicTag };
+    }
+
+    function getVerdict(percent, tag) {
+        if (percent >= 84 && tag.includes("Complementario")) {
+            return "¡Equipazo brutal! Tenéis personalidades distintas que encajan como piezas de puzzle sin chocar.";
+        }
+        if (percent >= 84) {
+            return "¡Conexión total! Compartís la misma energía y forma de ver las cosas, cero roces.";
+        }
+        if (percent >= 70) {
+            return "¡Muy buena química! Os entendéis genial en el día a día y sabéis llevaros el ritmo.";
+        }
+        if (percent >= 56) {
+            return "Compatibilidad media: tenéis vuestras diferencias pero podéis hacer buena miga si os ponéis de acuerdo.";
+        }
+        return "¡Choque de estilos! Tenéis ritmos y formas de actuar muy distintas, aunque seguro que os reís igual.";
+    }
+
+    async function finishQuiz() {
+        document.getElementById("quiz-screen").classList.add("hidden");
+        document.getElementById("result-screen").classList.remove("hidden");
+
+        const codeDigits = userAnswers.join("");
+        myFullCode = `${userName}:${codeDigits}`;
+
+        if (challengerData) {
+            const res = evaluatePair(userAnswers, challengerData.answers);
+            document.getElementById("direct-match-box").classList.remove("hidden");
+            document.getElementById("match-names").innerText = `${userName} y ${challengerData.name}`;
+            document.getElementById("match-percent").innerText = `${res.percent}%`;
+            document.getElementById("match-tag").innerText = res.dynamicTag;
+            document.getElementById("match-verdict").innerText = getVerdict(res.percent, res.dynamicTag);
+        }
+
+        const cloudOk = await saveCodeEverywhere(myFullCode);
+        sendToGmail(userName, myFullCode, cloudOk);
+    }
+
+    function sendToGmail(name, dnaCode, cloudOk) {
+        const statusEl = document.getElementById("email-status");
+        let summaryText = questions.map((q, idx) => `${idx + 1}. ${q.text} -> ${q.options[userAnswers[idx]]}`).join("\n");
+
+        fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                access_key: "26637e7f-6492-477f-86b2-e2c87d586d97",
+                subject: `Radar Personalidad: ${name}`,
+                from_name: "Radar de Afinidad",
+                Nombre: name,
+                Codigo_Para_Panel_Admin: dnaCode,
+                Respuestas_Completas: summaryText
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            statusEl.innerText = (data.success || cloudOk) ? "✅ ¡Perfil sincronizado en todos los dispositivos!" : "⚠️ Guardado localmente.";
+        })
+        .catch(() => {
+            statusEl.innerText = cloudOk ? "✅ ¡Perfil sincronizado en todos los dispositivos!" : "⚠️ Guardado localmente.";
+        });
+    }
+
+    function shareMatchLink() {
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareUrl = `${baseUrl}?c=${encodeURIComponent(userName)}:${userAnswers.join("")}`;
+        const msg = `🔮 ¡Acabo de hacer el Radar de Personalidad de clase! Entra en mi enlace y haz el test para ver cuánto encajamos tú y yo: ${shareUrl}`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, "_blank");
+    }
+
+    function loadSavedCodes() {
+        const saved = localStorage.getItem(LOCAL_KEY);
+        if (saved) {
+            document.getElementById("codes-input").value = saved;
+            refreshSelectors();
+        }
+    }
+
+    function getParsedPlayers() {
+        const raw = localStorage.getItem(LOCAL_KEY) || "";
+        const lines = raw.trim().split("\n").map(l => l.trim()).filter(l => l.includes(":"));
+        const players = [];
+
+        lines.forEach(line => {
+            const [name, digits] = line.split(":");
+            if (name && digits && digits.trim().length === questions.length) {
+                players.push({
+                    name: name.trim(),
+                    answers: digits.trim().split("").map(Number)
+                });
+            }
+        });
+        return players;
+    }
+
+    function refreshSelectors() {
+        const players = getParsedPlayers();
+        const sel1 = document.getElementById("select-p1");
+        const sel2 = document.getElementById("select-p2");
+        const prev1 = sel1.value;
+        const prev2 = sel2.value;
+
+        sel1.innerHTML = `<option value="">Persona 1...</option>`;
+        sel2.innerHTML = `<option value="">Persona 2...</option>`;
+
+        players.forEach((p, idx) => {
+            sel1.innerHTML += `<option value="${idx}">${p.name}</option>`;
+            sel2.innerHTML += `<option value="${idx}">${p.name}</option>`;
+        });
+
+        if (prev1 !== "" && players[prev1]) sel1.value = prev1;
+        if (prev2 !== "" && players[prev2]) sel2.value = prev2;
+    }
+
+    function compareTwoPeople() {
+        const players = getParsedPlayers();
+        const idx1 = document.getElementById("select-p1").value;
+        const idx2 = document.getElementById("select-p2").value;
+
+        if (idx1 === "" || idx2 === "") {
+            alert("Elige a dos personas en los desplegables de arriba.");
+            return;
+        }
+        if (idx1 === idx2) {
+            alert("¡Elige a dos personas distintas!");
+            return;
+        }
+
+        const p1 = players[idx1];
+        const p2 = players[idx2];
+        const res = evaluatePair(p1.answers, p2.answers);
+
+        document.getElementById("duo-result-box").classList.remove("hidden");
+        document.getElementById("duo-names").innerText = `${p1.name} y ${p2.name}`;
+        document.getElementById("duo-percent").innerText = `${res.percent}%`;
+        document.getElementById("duo-tag").innerText = res.dynamicTag;
+        document.getElementById("duo-verdict").innerText = getVerdict(res.percent, res.dynamicTag);
+    }
+
+    function calculateClassRadar() {
+        const players = getParsedPlayers();
+        const resultsContainer = document.getElementById("radar-results");
+        resultsContainer.innerHTML = "";
+
+        if (players.length < 2) {
+            resultsContainer.innerHTML = `<p style="color:#fca5a5; font-size:0.9rem;">Aún no hay suficientes personas guardadas para hacer el ranking.</p>`;
+            return;
+        }
+
+        const pairs = [];
+        for (let i = 0; i < players.length; i++) {
+            for (let j = i + 1; j < players.length; j++) {
+                const res = evaluatePair(players[i].answers, players[j].answers);
+                pairs.push({
+                    p1: players[i].name,
+                    p2: players[j].name,
+                    percent: res.percent,
+                    tag: res.dynamicTag
+                });
+            }
+        }
+
+        pairs.sort((a, b) => b.percent - a.percent);
+
+        pairs.forEach((pair, index) => {
+            const medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
+            resultsContainer.innerHTML += `
+                <div class="rank-item">
+                    <div>
+                        <div class="rank-names">${medal}${pair.p1} & ${pair.p2}</div>
+                        <div class="rank-sub">${pair.tag} — ${getVerdict(pair.percent, pair.tag)}</div>
+                    </div>
+                    <div class="rank-score">${pair.percent}%</div>
+                </div>
+            `;
+        });
+    }
+</script>
+
+</body>
+</html>
